@@ -69,6 +69,7 @@ Four EduBfM_DiscardAll(void)
             // do not need to initialize fixed
             // reset all bits
             BI_BITS(type, i) = ALL_0;
+            BI_FIXED(type, i) = 0;
             // do not need to initialize nextHashEntry
         }
     }

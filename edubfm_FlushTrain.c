@@ -64,7 +64,7 @@
  // related functions: edubfm_LookUp(), RDsM_WriteTrain()
 
 Four edubfm_FlushTrain(
-    TrainID 			*trainId,		/* IN train to be flushed */
+    TrainID 		*trainId,		/* IN train to be flushed */
     Four   			type)			/* IN buffer type */
 {
     Four 			e;			/* for errors */
@@ -92,7 +92,7 @@ Four edubfm_FlushTrain(
         BI_BITS(type, index) ^= DIRTY;
         return e;
     }
-	
-    return( eNOERROR );
-
+	else {
+        return( eNOERROR );
+    }
 }  /* edubfm_FlushTrain */

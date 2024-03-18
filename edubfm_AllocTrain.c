@@ -84,7 +84,7 @@ Four edubfm_AllocTrain(
     victim = BI_NEXTVICTIM(type);
     
     //NEXTVICTIM은 buffer replacement algorithm에 의해 결정되는게 아니라, 거기부터 second chance algorithm을 시작한다는 의미
-    while(1) {
+    for (i = 0; i< 2*BI_NBUFS(type); i++) {
         if (!BI_FIXED(type, victim)) {
             // 만약 refer bit이 켜져있다면, 꺼준다.
             if (BI_BITS(type, victim) & REFER == 1) {
@@ -106,7 +106,7 @@ Four edubfm_AllocTrain(
 
     // victim을 완전히 밀어버린다.
     BI_BITS(type, victim) = ALL_0;
-    e = edubfm_Delete(&BI_KEY(type, victim), type);
+    edubfm_Delete(&BI_KEY(type, victim), type);
     BI_NEXTVICTIM(type) = (victim + 1) % BI_NBUFS(type);
 
     return( victim );

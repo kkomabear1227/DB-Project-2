@@ -89,7 +89,7 @@ Four edubfm_Insert(
 
     CHECKKEY(key);    /*@ check validity of key */
 
-    if( (index < 0) || (index > BI_NBUFS(type)) )
+    if( (index < 0) || (index > BI_NBUFS(type)) ) 
         ERR( eBADBUFINDEX_BFM );
 
     // 여기부터 시작
