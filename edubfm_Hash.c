@@ -104,13 +104,12 @@ Four edubfm_Insert(
     }
     // 3. if there is a collision, use the chaining method to handle the collision
     else {
-        //Store the existing hashTable entry (array index) into the variable nextHashEntry of the buffer element.
+        // Store the existing hashTable entry (array index) into the variable nextHashEntry of the buffer element.
         BI_NEXTHASHENTRY(type, index) = BI_HASHTABLEENTRY(type, hashValue);
         BI_HASHTABLEENTRY(type, hashValue) = index;
     }
 
     return( eNOERROR );
-
 }  /* edubfm_Insert */
 
 
@@ -147,7 +146,14 @@ Four edubfm_Delete(
     hashValue = BFM_HASH(key, type);
     i = BI_HASHTABLEENTRY(type, hashValue);
 
-    ERR( eNOTFOUND_BFM );
+    // Delete할 object가 없다면..
+    if (i == NIL) {
+        ERR( eNOTFOUND_BFM );
+    }
+
+    
+
+    if (EQUAL)
 
 }  /* edubfm_Delete */
 
