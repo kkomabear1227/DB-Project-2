@@ -60,6 +60,9 @@
  *  error code
  *    some errors caused by function calls
  */
+
+ // related functions: edubfm_LookUp(), RDsM_WriteTrain()
+
 Four edubfm_FlushTrain(
     TrainID 			*trainId,		/* IN train to be flushed */
     Four   			type)			/* IN buffer type */
@@ -71,7 +74,21 @@ Four edubfm_FlushTrain(
 	/* Error check whether using not supported functionality by EduBfM */
 	if (RM_IS_ROLLBACK_REQUIRED()) ERR(eNOTSUPPORTED_EDUBFM);
 
+    // 여기부터 시작
+    // 1. Search for the array index of the buffer element containing the page/train to be flushed
+    index = edubfm_LookUp(trainId, type);
 
+    if (index != NIL) {
+        // case 1. DIRTY bit이 켜진 경우
+        if (BI_BITS(type, index) & DIRTY == 1) {
+            e = RDsM_WriteTrain(BI_BUFFER(type, index), trainId, BI_BUFSIZE(type));
+            if (e < 0) ERR(e);
+
+            //DIRTY BIT을 끈다.
+            BI_BITS(type, index) ^= DIRTY;
+            return e;
+        }
+    }
 	
     return( eNOERROR );
 
