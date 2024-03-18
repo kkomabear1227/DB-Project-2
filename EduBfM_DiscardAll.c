@@ -59,6 +59,8 @@ Four EduBfM_DiscardAll(void)
     Two 	i;			/* index */
     Four 	type;			/* buffer type */
 
+    // Flush가 아닌, Discard. DIRTY bit과는 관련이 없다. 
+
     // 1. 모든 bufTable의 값을 초기화
     for (type = 0; type < NUM_BUF_TYPES; type++) {
         for (i = 0; i < BI_NBUFS(type); i++) {
@@ -71,7 +73,7 @@ Four EduBfM_DiscardAll(void)
         }
     }
 
-    // 2. ahems hashTable entry를 delete
+    // 2. 모든 hashTable entry를 delete
     edubfm_DeleteAll();
 
     return(eNOERROR);
