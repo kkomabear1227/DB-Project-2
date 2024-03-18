@@ -64,6 +64,13 @@
  *  1) parameter aTrain
  *     a buffer specified by 'aTrain' is filled with a disk content
  */
+
+  /*
+    Store the page/train in a buffer element reading it from the
+    disk, and return the pointer to the corresponding buffer
+    element.
+ */
+
 Four edubfm_ReadTrain(
     TrainID *trainId,		/* IN which train? */
     char    *aTrain,		/* OUT a pointer to buffer */
@@ -75,7 +82,10 @@ Four edubfm_ReadTrain(
 	/* Error check whether using not supported functionality by EduBfM */
 	if (RM_IS_ROLLBACK_REQUIRED()) ERR(eNOTSUPPORTED_EDUBFM);
 
-
+    // 여기부터 구현
+    // p45~46 예제 코드 참고
+    e = RDsM_ReadTrain(trainId, aTrain, BI_BUFSIZE(type))
+    if (e < 0) ERR(e);
 
     return( eNOERROR );
 
