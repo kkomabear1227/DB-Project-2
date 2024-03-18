@@ -79,11 +79,13 @@
  */
 Four edubfm_Insert(
     BfMHashKey 		*key,			/* IN a hash key in Buffer Manager */
+    // pageNo, volNo
     Two 		index,			/* IN an index used in the buffer pool */
     Four 		type)			/* IN buffer type */
 {
     Four 		i;			
     Two  		hashValue;
+    Two         insert
 
 
     CHECKKEY(key);    /*@ check validity of key */
@@ -91,7 +93,15 @@ Four edubfm_Insert(
     if( (index < 0) || (index > BI_NBUFS(type)) )
         ERR( eBADBUFINDEX_BFM );
 
-   
+    // 여기부터 시작
+    // 1. key의 pageNo, volNo를 바탕으로, 위치를 찾는다.
+    hashValue = BFM_HASH(key, type);
+    i = BI_HASHTABLEENTRY(type, hashValue);
+
+    // 2. hash 충돌이 발생했을 경우, linear probing에 맞게 기존 has hentry를 뒤로 옮기고, 그 자리에 집어넣는다.
+    if (i != NIL) {
+        BI_NEXTHASHENTRY(type, index) = BI_HASHTABLEENTRY(type, index);
+    }
 
     return( eNOERROR );
 
@@ -126,7 +136,10 @@ Four edubfm_Delete(
 
     CHECKKEY(key);    /*@ check validity of key */
 
-
+    //여기부터 시작
+    // 1. key의 pageNo, volNo를 바탕으로 위치를 찾는다.
+    hashValue = BFM_HASH(key, type);
+    i = BI_HASH
 
     ERR( eNOTFOUND_BFM );
 

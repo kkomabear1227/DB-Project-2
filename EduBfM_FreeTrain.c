@@ -62,12 +62,23 @@ Four EduBfM_FreeTrain(
 {
     Four                index;          /* index on buffer holding the train */
     Four 		e;		/* error code */
+    Two         fixed;
 
     /*@ check if the parameter is valid. */
     if (IS_BAD_BUFFERTYPE(type)) ERR(eBADBUFFERTYPE_BFM);	
 
+    index = edubfm_LookUp(trainId, type);
 
-    
-    return( eNOERROR );
-    
+    // case 1. 존재
+    if (index != NIL) {
+        fixed = BI_FIXED(type, index);
+        fixed--;
+        BI_FIXED(type, index) = fixed;
+    }
+    // case 2. 존재X
+    else {
+        ERR(eBADHASHKEY_BFM);
+    }
+
+    return( eNOERROR );    
 } /* EduBfM_FreeTrain() */
