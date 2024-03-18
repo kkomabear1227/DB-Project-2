@@ -59,7 +59,20 @@ Four EduBfM_DiscardAll(void)
     Two 	i;			/* index */
     Four 	type;			/* buffer type */
 
+    // 1. 모든 bufTable의 값을 초기화
+    for (type = 0; type < NUM_BUF_TYPES; type++) {
+        for (i = 0; i < BI_NBUFS(type); i++) {
+            // set pageNo to NIL(-1)
+            SET_NILBFMHASHKEY(BI_KEY(type, i));
+            // do not need to initialize fixed
+            // reset all bits
+            BI_BITS(type, i) = ALL_0;
+            // do not need to initialize nextHashEntry
+        }
+    }
 
+    // 2. ahems hashTable entry를 delete
+    edubfm_DeleteAll();
 
     return(eNOERROR);
 

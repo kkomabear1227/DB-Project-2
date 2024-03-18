@@ -71,7 +71,7 @@ Four EduBfM_FlushAll(void)
                  * Description : Free(or unfix) a buffer.
                  * Exports: Four EduBfM_FreeTrain(TrainID *, Four)
                  */
-                e = EduBfM_FreeTrain(&BI_KEY(type, i), type);
+                e = EduBfM_FreeTrain(/*~~~*/, type);
             }
         }
     }
