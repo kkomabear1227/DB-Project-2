@@ -65,13 +65,24 @@ Four EduBfM_SetDirty(
     Four                type )                  /* IN buffer type */
 {
     Four                index;                  /* an index of the buffer table & pool */
+    One                 bits;
 
 
     /*@ Is the paramter valid? */
     if (IS_BAD_BUFFERTYPE(type)) ERR(eBADBUFFERTYPE_BFM);
 
+    // 여기부터 작업
+    index = edubfm_LookUp(trainId, type);
 
+    // index가 존재한다면 DIRTY bit을 setting 한다.
+    if (index != NIL) {
+        bits = BI_BITS(type, index);
+        bits |= DIRTY;
+        BI_BITS(type, index) = bits;
+    }
+    else {
+        ERR(eBADHASHKEY_BFM);
+    }
 
     return( eNOERROR );
-
 }  /* EduBfM_SetDirty */

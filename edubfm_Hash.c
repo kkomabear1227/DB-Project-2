@@ -174,7 +174,21 @@ Four edubfm_LookUp(
 
     CHECKKEY(key);    /*@ check validity of key */
 
-
+    // 여기부터 작업
+    // 1. hash key 값을 계산해준다.
+    hashValue = BFM_HASH(key, type);
+    // 2. hash 값을 바탕으로 위치 index를 찾는다.
+    i = BI_HASHTABLEENTRY(type, hashValue);
+    // 3. linear probing 시작
+    j = i;
+    while(j != NIL) {
+        if (EQUALKEY( &BI_KEY(type, j), key)) {
+            return j;
+        }
+        else {
+            j = BI_NEXTHASHENTRY(type, j);
+        }
+    }
 
     return(NOTFOUND_IN_HTABLE);
     
