@@ -81,7 +81,20 @@ Four edubfm_AllocTrain(
 
     // 여기부터 진행
     // Use the second chance buffer replacement algorithm to select the buffer element to be allocated.
-    victim = BI_NEXTVICTIM(type)
+    victim = BI_NEXTVICTIM(type);
+    
+    //NEXTVICTIM은 buffer replacement algorithm에 의해 결정되는게 아니라, 거기부터 second chance algorithm을 시작한다는 의미
+    while(1) {
+        if (!BI_FIXED(type, victim)) {
+            // 만약 refer bit이 켜져있다면, 꺼준다.
+            if (BI_BITS(type, victim) & REFER == 1) {
+                BI_BITS(type, victim) ^= REFER;
+            }
+            // 꺼져있는 victim을 선정하면 된다.
+            else break;
+        }
+        victim = (victim + 1) % BI_NBUFS(type);
+    }
 
     // victim의 DIRTY bit이 켜져있다면, 덮어쓰기 전 flush를 진행해야한다.
     if (BI_BITS(type, victim) & DIRTY == 1) {
