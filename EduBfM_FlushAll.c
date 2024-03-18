@@ -60,7 +60,21 @@ Four EduBfM_FlushAll(void)
     Two         i;                      /* index */
     Four        type;                   /* buffer type */
 
-    
+    // PAGE_BUF와 LOT_LEAF_BUF 모두 초기화를 진행
+    for (type = 0; type < NUM_BUF_TYPES; type++) {
+        // 해당 buffer의 모든 element 들에 대해
+        for (i = 0; i < BI_NBUFS(type); i++) {
+            // DIRTY -> write back 해야함.
+            if (BI_BITS(type, i) & DIRTY == 1) {
+                /*
+                 * Module: EduBfM_FreeTrain.c
+                 * Description : Free(or unfix) a buffer.
+                 * Exports: Four EduBfM_FreeTrain(TrainID *, Four)
+                 */
+                e = EduBfM_FreeTrain(&BI_KEY(type, i), type);
+            }
+        }
+    }
 
     return( eNOERROR );
     
