@@ -79,8 +79,23 @@ Four edubfm_AllocTrain(
 	/* Error check whether using not supported functionality by EduBfM */
 	if(sm_cfgParams.useBulkFlush) ERR(eNOTSUPPORTED_EDUBFM);
 
-    
-    
+    // 여기부터 진행
+    // Use the second chance buffer replacement algorithm to select the buffer element to be allocated.
+    victim = BI_NEXTVICTIM(type)
+
+    // victim의 DIRTY bit이 켜져있다면, 덮어쓰기 전 flush를 진행해야한다.
+    if (BI_BITS(type, victim) & DIRTY == 1) {
+        e = edubfm_FlushTrain(&BI_KEY(type, victim), type);
+        if (e != eNOERROR) return e;
+
+        BI_BITS(type, victim) ^= DIRTY;
+    }
+
+    // victim을 완전히 밀어버린다.
+    BI_BITS(type, victim) = ALL_0;
+    e = edubfm_Delete(&BI_KEY(type, victim), type);
+    BI_NEXTVICTIM(type) = (victim + 1) % BI_NBUFS(type);
+
     return( victim );
     
 }  /* edubfm_AllocTrain */
