@@ -46,6 +46,8 @@
 
 /* The structure of key type used at hashing in buffer manager */
 /* same as "typedef BfMHashKey PageID; */
+
+// hash key 안에 page와 volume이 있음
 typedef struct {
     PageNo pageNo;		/* a PageNo */
     VolNo volNo;		/* a volumeNo */
@@ -56,6 +58,7 @@ typedef struct {
  * Parameter:
  *  BfMHashKey key  : hash key
  */
+ // BfMHashKey에 -1을 넣는
 #define SET_NILBFMHASHKEY(key) (SET_NILPAGEID(key))
 
 /* Macro: IS_NILBFMHASHKEY(key)
@@ -64,6 +67,7 @@ typedef struct {
  *  BfMHashKey key  : hash key
  * Returns: TRUE(1) if pageNo of the hash key is NIL, otherwise FALSE(0)
  */
+ // BfMHashKey가 -1인지
 #define IS_NILBFMHASHKEY(key)  (IS_NILPAGEID(key))
 
 /* Macro: CHECKKEY(k)
@@ -71,6 +75,7 @@ typedef struct {
  * Parameter:
  *  BfMHashKey *k    : pointer to the hash key
  */
+ // Key가 invalid인지
 #define CHECKKEY(k)  \
 	        { if( ((k)->volNo < 0) || ((k)->pageNo < 0) )  \
 				              return( eBADHASHKEY_BFM ); }
@@ -82,10 +87,12 @@ typedef struct {
  *  BfMHashKey *k2   : pointer to the hash key
  * Returns: TRUE(1) if k1 is equal to k2, otherwise FALSE(0)
  */
+ // 두 key가 같은지 (search에 쓸 수 있나?)
 #define EQUALKEY(k1, k2) \
           (((k1)->volNo == (k2)->volNo) && ((k1)->pageNo == (k2)->pageNo))
 
 /* The structure of BufferTable which is used in buffer replacement algo. */
+// fix, unfix할 때 값을 올려주어야한다.
 typedef struct {
     BfMHashKey 	key;		/* identify a page */
     Two    	fixed;		/* fixed count */
@@ -100,6 +107,7 @@ typedef struct {
 #define ALL_1  ((sizeof(One) == 1) ? (0xff) : (0xffff))
 
 /* type definition for buffer pool information */
+// PPT의 bufInfo에 해당하는 듯
 typedef struct {
     Two                 bufSize;        /* size of a buffer in page size */
     UTwo                nextVictim;     /* starting point for searching a next victim */
@@ -115,6 +123,8 @@ typedef struct {
  *  Four type       : buffer type
  * Returns: (Two) size of a buffer element
  */
+ // buffer element의 size를 return
+ // 한 buffer element가 여러 page를 차지할 수 있나?
 #define BI_BUFSIZE(type)	     (bufInfo[type].bufSize)
 
 /* Macro: BI_NBUFS(type)
@@ -123,6 +133,7 @@ typedef struct {
  *  Four type       : buffer type
  * Returns: (Two) the number of buffer elements
 */
+// buffer element의 개수를 return
 #define BI_NBUFS(type)           (bufInfo[type].nBufs)
 
 /* Macro: BI_NEXTVICTIM(type)
@@ -131,7 +142,11 @@ typedef struct {
  *  Four type       : buffer type
  * Returns: (UTwo) an array index of the next victim
  */
+ // buffer element의 next victim을 return
 #define BI_NEXTVICTIM(type)	     (bufInfo[type].nextVictim)
+
+// 종합적인 생각: bufInfo의 값을 계속 변경시켜나가야한다.
+// 바로 참조가 가능할 수 있도록
 
 /* Macro: BI_KEY(type, idx)
  * Description: return the hash key of the page/train residing in the buffer element
@@ -140,6 +155,7 @@ typedef struct {
  *  Four idx        : array index of the buffer element
  * Returns: (BfMHashKey) hash key
  */
+ // buffer element 안에 있는 hash key를 접근할 때
 #define BI_KEY(type, idx)	     (((BufferTable*)bufInfo[type].bufTable)[idx].key)
 
 /* Macro: BI_FIXED(type, idx)
@@ -149,6 +165,7 @@ typedef struct {
  *  Four idx        : array index of the buffer element
  * Returns: (Two) number of transactions
  */
+ //fixing하고 있는 transaction의 개수 (한 element를 여러 transaction이 fix할 수도 있다)
 #define BI_FIXED(type, idx)	     (((BufferTable*)bufInfo[type].bufTable)[idx].fixed)
 
 /* Macro: BI_BITS(type, idx)
@@ -158,6 +175,7 @@ typedef struct {
  *  Four idx        : array index of the buffer element
  * Returns: (One) set of bits
  */
+ // buffer element의 현재 setting 되어있는 bit
 #define BI_BITS(type, idx)	     (((BufferTable*)bufInfo[type].bufTable)[idx].bits)
 
 /* Macro: BI_NEXTHASHENTRY(type, idx)
@@ -167,6 +185,7 @@ typedef struct {
  *  Four idx        : array index of the buffer element containing the current page/train
  * Returns: (Two) array index of the buffer element containing the next page/train
  */
+ // right direction pointer로 접근하는 것을 말하는 듯
 #define BI_NEXTHASHENTRY(type, idx)  (((BufferTable*)bufInfo[type].bufTable)[idx].nextHashEntry)
 
 /* Macro: BI_BUFFERPOOL(type)
@@ -175,6 +194,7 @@ typedef struct {
  *  Four type       : buffer type
  * Returns: (char *) pointer to the buffer pool
  */
+ // 
 #define BI_BUFFERPOOL(type)	     (bufInfo[type].bufferPool)
 
 /* Macro: BI_BUFFER(type, idx)
