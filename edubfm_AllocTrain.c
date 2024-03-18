@@ -73,13 +73,12 @@ Four edubfm_AllocTrain(
 {
     Four 	e;			/* for error */
     Four 	victim;			/* return value */
-    Four 	i;
-    
+    Four 	i;   
 
 	/* Error check whether using not supported functionality by EduBfM */
 	if(sm_cfgParams.useBulkFlush) ERR(eNOTSUPPORTED_EDUBFM);
 
-
+    
     
     return( victim );
     
