@@ -82,7 +82,7 @@ Four EduBfM_SetDirty(
     }
     else {
         ERR(eBADHASHKEY_BFM);
-    }
+    } 
 
     return( eNOERROR );
 }  /* EduBfM_SetDirty */
