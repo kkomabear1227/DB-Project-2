@@ -85,8 +85,7 @@ Four edubfm_Insert(
 {
     Four 		i;			
     Two  		hashValue;
-    Two         insert
-
+    Two         insert;
 
     CHECKKEY(key);    /*@ check validity of key */
 
@@ -150,7 +149,7 @@ Four edubfm_Delete(
     }
     else {
         prev = BI_NEXTHASHENTRY(type, i);
-        hashValue = BFM_HASH(key, value);
+        hashValue = BFM_HASH(key, type);
         BI_HASHTABLEENTRY(type, hashValue) = prev;
     }
 

@@ -107,13 +107,13 @@ Four EduBfM_GetTrain(
         BI_BITS(type, index) = bits;
         
         // return할 element를 buffer element로 맞춘다.
-        *refBuf = BI_BUFFER(type, index);
+        *retBuf = BI_BUFFER(type, index);
     }
     // case 2. 존재하지 않음
     else {
         Four new_index;
         // 1. bufferPool에서 index를 할당 받는다.
-        new-index = edubfm_ReadTrain(trainId, BI_BUFFER(type, allocatedIdx), type);
+        new_index = edubfm_ReadTrain(trainId, BI_BUFFER(type, new_index), type);
 
         // 2. disk에 존재하는 train을 읽는다.
         e = edubfm_ReadTrain(trainId, BI_BUFFER(type, index), type);
@@ -125,10 +125,10 @@ Four EduBfM_GetTrain(
         BI_BITS(type, new_index) = REFER;
 
         // 4. Hash table을 update한다.
-        edubfm_Insert(trainId, new_index. type);
+        edubfm_Insert(trainId, new_index, type);
 
         //return할 element를 buffer element로 맞춘다.
-        *refBuf = BI_BUFFER(type, index);
+        *retBuf = BI_BUFFER(type, index);
     }
 
     return(eNOERROR);   /* No error */

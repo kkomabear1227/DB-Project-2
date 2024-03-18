@@ -84,7 +84,7 @@ Four edubfm_ReadTrain(
 
     // 여기부터 구현
     // p45~46 예제 코드 참고
-    e = RDsM_ReadTrain(trainId, aTrain, BI_BUFSIZE(type))
+    e = RDsM_ReadTrain(trainId, aTrain, BI_BUFSIZE(type));
     if (e < 0) ERR(e);
 
     return( eNOERROR );
