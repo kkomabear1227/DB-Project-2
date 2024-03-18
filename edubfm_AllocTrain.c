@@ -68,6 +68,7 @@ extern CfgParams_T sm_cfgParams;
  *     eNOUNFIXEDBUF_BFM - There is no unfixed buffer.
  *     some errors caused by fuction calls
  */
+
 Four edubfm_AllocTrain(
     Four 	type)			/* IN type of buffer (PAGE or TRAIN) */
 {
