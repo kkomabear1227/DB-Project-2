@@ -98,9 +98,14 @@ Four edubfm_Insert(
     hashValue = BFM_HASH(key, type);
     i = BI_HASHTABLEENTRY(type, hashValue);
 
-    // 2. hash 충돌이 발생했을 경우, linear probing에 맞게 기존 has hentry를 뒤로 옮기고, 그 자리에 집어넣는다.
-    if (i != NIL) {
-        BI_NEXTHASHENTRY(type, index) = BI_HASHTABLEENTRY(type, index);
+    // 2. if there is no collision, insert the array index into the position determined
+    if (i == NIL) {
+        BI_HASHTABLEENTRY(type, hashValue) = index;
+    }
+    // 3. if there is a collision, use the chaining method to handle the collision
+    else {
+        //Store the existing hashTable entry (array index) into the variable nextHashEntry of the buffer element.
+        BI_NEXTHASHENTRY(type, index) = BI_HASHTABLEENTRY(type, hashValue);
     }
 
     return( eNOERROR );
