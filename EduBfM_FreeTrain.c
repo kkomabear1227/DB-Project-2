@@ -63,6 +63,12 @@ Four EduBfM_FreeTrain(
 
     // case 1. 존재
     if (index != NIL) {
+        // fix count가 음수가 되는 경우 -> error print
+        if (BI_FIXED(type, index) == 0) {
+            printf("fixed counter is less than 0!!!\n");
+            printf("trainId = {%d, %d}\n", trainId->volNo, trainId->pageNo);
+        }
+        
         fixed = BI_FIXED(type, index);
         fixed--;
         BI_FIXED(type, index) = fixed;
