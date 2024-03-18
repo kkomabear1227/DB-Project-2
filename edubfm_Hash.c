@@ -105,7 +105,7 @@ Four edubfm_Insert(
     // 3. if there is a collision, use the chaining method to handle the collision
     else {
         //Store the existing hashTable entry (array index) into the variable nextHashEntry of the buffer element.
-        BI_NEXTHASHENTRY(type, index) = BI_HASHTABLEENTRY(type, hashValue);
+        BI_NEXTHASHENTRY(type, hashValue) = BI_HASHTABLEENTRY(type, index);
     }
 
     return( eNOERROR );
@@ -144,7 +144,7 @@ Four edubfm_Delete(
     //여기부터 시작
     // 1. key의 pageNo, volNo를 바탕으로 위치를 찾는다.
     hashValue = BFM_HASH(key, type);
-    i = BI_HASH
+    i = BI_HASHTABLEENTRY(type, hashValue);
 
     ERR( eNOTFOUND_BFM );
 
@@ -219,9 +219,16 @@ Four edubfm_LookUp(
 Four edubfm_DeleteAll(void)
 {
     Two 	i;
-    Four        tableSize;
-    
+    Four    tableSize;
+    Four    type;
 
+    // 모든 hashtable entry들을 지운다.
+    for (type = 0; type < NUM_BUF_TYPES; type++) {
+        tableSize = HASHTABLESIZE(type);
+        for (i = 0; i < tableSize; i++) {
+            BI_HASHTABLEENTRY(type, i) = NIL;
+        }
+    }
 
     return(eNOERROR);
 
