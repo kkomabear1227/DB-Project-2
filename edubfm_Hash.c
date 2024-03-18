@@ -142,19 +142,19 @@ Four edubfm_Delete(
     CHECKKEY(key);    /*@ check validity of key */
 
     //여기부터 시작
-    // 1. key의 pageNo, volNo를 바탕으로 위치를 찾는다.
-    hashValue = BFM_HASH(key, type);
-    i = BI_HASHTABLEENTRY(type, hashValue);
-
-    // Delete할 object가 없다면..
+    // 1. key의 pageNo, volNo를 바탕으로 array index i를 찾는다.
+    i = edubfm_LookUp(key, type);
     if (i == NIL) {
-        ERR( eNOTFOUND_BFM );
+        ERR(eNOTFOUND_BFM);
+        return eNOTFOUND_BFM;
+    }
+    else {
+        prev = BI_NEXTHASHENTRY(type, i);
+        hashValue = BFM_HASH(key, value);
+        BI_HASHTABLEENTRY(type, hashValue) = prev;
     }
 
-    
-
-    if (EQUAL)
-
+    return (eNOERROR);
 }  /* edubfm_Delete */
 
 
