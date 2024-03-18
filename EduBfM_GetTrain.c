@@ -74,6 +74,8 @@ Four EduBfM_GetTrain(
 {
     Four                e;                      /* for error */
     Four                index;                  /* index of the buffer pool */
+    Two                 fixed;
+    One                 bits;
 
 
     /*@ Check the validity of given parameters */
@@ -83,7 +85,42 @@ Four EduBfM_GetTrain(
     /* Is the buffer type valid? */
     if(IS_BAD_BUFFERTYPE(type)) ERR(eBADBUFFERTYPE_BFM);	
 
+    // 여기부터 시작
+    /*
+     *  edubfm_LookUp()?
+     *  Look up the given key in the hash table and return its
+     *  corressponding index to the buffer table.
+     */
+    // 찾고자하는 train이 bufferPool 안에 존재하는지를 살펴본다.
+    index = edubfm_LookUp(trainId, type);
+    
+    // case 1. 존재
+    if (index != NIL) {
+        // fixed 값을 1 증가시킨다.
+        fixed = BI_FIXED(type, index);
+        fixed++;
+        BI_FIXED(type, index) = fixed;
 
+        // bits 값을 REFER로 맞춘다.
+        bits = BI_BITS(type, index);
+        bits = REFER;
+        BI_BITS(type, index) = bits;
+        
+        // return할 element를 buffer element로 맞춘다.
+        *refBuf = BI_BUFFER(type, index);
+    }
+    // case 2. 존재하지 않음
+    else {
+        // 1. bufferPool에서 index를 할당 받는다.
+        
+        // 2. disk에 존재하는 train을 읽는다.
+
+        // 3. bufferTable에 train을 쓴다.
+
+        // 4. Hash table을 update한다.
+
+        *refBuf = BI_BUFFER(type, index);
+    }
 
     return(eNOERROR);   /* No error */
 
