@@ -52,13 +52,14 @@ Four EduBfM_FreeTrain(
     TrainID             *trainId,       /* IN train to be freed */
     Four                type)           /* IN buffer type */
 {
-    Four                index;          /* index on buffer holding the train */
+    Four        index;          /* index on buffer holding the train */
     Four 		e;		/* error code */
     Two         fixed;
 
     /*@ check if the parameter is valid. */
     if (IS_BAD_BUFFERTYPE(type)) ERR(eBADBUFFERTYPE_BFM);	
 
+    // 1. Unfix할 page/train의 hash key로 buffer index를 검색
     index = edubfm_LookUp(trainId, type);
 
     // case 1. 존재
@@ -67,15 +68,14 @@ Four EduBfM_FreeTrain(
         if (BI_FIXED(type, index) == 0) {
             printf("fixed counter is less than 0!!!\n");
             printf("trainId = {%d, %d}\n", trainId->volNo, trainId->pageNo);
+        } 
+        else {
+            BI_FIXED(type, index)--;
         }
-        
-        fixed = BI_FIXED(type, index);
-        fixed--;
-        BI_FIXED(type, index) = fixed;
     }
     // case 2. 존재X
     else {
-        ERR(eBADHASHKEY_BFM);
+        return NOTFOUND_IN_HTABLE;
     }
 
     return( eNOERROR );    
