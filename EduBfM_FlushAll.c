@@ -73,8 +73,6 @@ Four EduBfM_FlushAll(void)
                  */
                 //해당 train을 flush
                 edubfm_FlushTrain(&(BI_KEY(type, i)), type);
-                //DIRTY bit을 끈다.
-                BI_BITS(type, i) ^= DIRTY;
             }
         }
     }

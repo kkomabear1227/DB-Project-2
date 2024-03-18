@@ -125,7 +125,7 @@ Four EduBfM_GetTrain(
         BI_KEY(type, new_index).pageNo = trainId->pageNo;
         BI_KEY(type, new_index).volNo = trainId->volNo;
         BI_FIXED(type, new_index) = 1;
-        BI_BITS(type, new_index) = REFER;
+        BI_BITS(type, new_index) |= REFER;
 
         // 4. Hash table을 update한다.
         edubfm_Insert(trainId, new_index, type);
